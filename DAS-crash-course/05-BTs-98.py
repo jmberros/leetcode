@@ -23,15 +23,15 @@ class Solution:
             root = build2(root)
         print(root)
 
-        def helper(node, lb, ub):
+        def validate(node, lb, ub):
             # Test if current node is within valid limits or raise
             if node.val <= lb or node.val >= ub:
                 return False
-            left_is_valid = (node.left is None) or helper(node.left, lb=lb, ub=node.val)
-            right_is_valid = (node.right is None) or helper(node.right, lb=node.val, ub=ub)
+            left_is_valid = (node.left is None) or validate(node.left, lb=lb, ub=node.val)
+            right_is_valid = (node.right is None) or validate(node.right, lb=node.val, ub=ub)
             return left_is_valid and right_is_valid
 
-        return helper(root, float("-inf"), float("+inf"))
+        return validate(root, float("-inf"), float("+inf"))
 
 
 if __name__ == "__main__":

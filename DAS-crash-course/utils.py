@@ -1,4 +1,8 @@
 from termcolor import colored
+from binarytree import build2, Node
+
+
+TreeNode = Node  # Same naming as in leetcode
 
 
 def run_test_cases(Solution, test_cases):
@@ -23,3 +27,20 @@ def run_test_cases(Solution, test_cases):
             print("out = " + out)
             print(f"{exp = }")
             print("--")
+
+
+def isValidBST(root) -> bool:
+    if isinstance(root, list):
+        root = build2(root)
+
+    # print(root)
+
+    def validate(node, lb, ub):
+        # Test if current node is within valid limits or raise
+        if node.val <= lb or node.val >= ub:
+            return False
+        left_is_valid = (node.left is None) or validate(node.left, lb=lb, ub=node.val)
+        right_is_valid = (node.right is None) or validate(node.right, lb=node.val, ub=ub)
+        return left_is_valid and right_is_valid
+
+    return validate(root, float("-inf"), float("+inf"))
