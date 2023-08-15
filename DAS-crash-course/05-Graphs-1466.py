@@ -56,6 +56,31 @@ class Solution:
 
         return num_changes
 
+    def minReorder_DFS(self, n: int, connections: List[List[int]]) -> int:
+        roads = set()
+        graph = defaultdict(list)
+        for x, y in connections:
+            roads.add((x, y))
+            graph[x].append(y)
+            graph[y].append(x)
+
+        visited = set()
+
+        def helper(node):
+            num_changes = 0
+            visited.add(node)
+
+            for other in graph[node]:
+                if other not in visited:
+                    if (node, other) in roads:  # Needs reversal
+                        # print(f"Reverse {node}->{other}")
+                        num_changes += 1
+                    num_changes += helper(other)
+
+            return num_changes
+
+        return helper(0)
+
 
 if __name__ == '__main__':
     run_test_cases(Solution, test_cases)
