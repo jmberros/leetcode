@@ -1,7 +1,6 @@
 # https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/
 
 from collections import deque
-from pprint import pprint
 from collections import defaultdict
 from utils import run_test_cases
 from typing import List
