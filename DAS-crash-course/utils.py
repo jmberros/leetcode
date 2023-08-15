@@ -8,7 +8,7 @@ TreeNode = Node  # Same naming as in leetcode
 def run_test_cases(Solution, test_cases):
     methods = [
         attribute for attribute in dir(Solution)
-        if not attribute.startswith("__")
+        if not attribute.startswith("_")
         and callable(getattr(Solution, attribute))
     ]
 
