@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Union
 
 
 class Node:
@@ -10,42 +10,43 @@ class Node:
 
 class DoublyLinkedList:
     def __init__(self):
-        self.dummy_head = Node("dummy")
-        self.dummy_tail = Node("dummy")
-        self.dummy_head.next = self.dummy_tail
-        self.dummy_tail.prev = self.dummy_head
-
-    @property
-    def head(self) -> Optional[Node]:
-        return self.dummy_head.next
-
-    @property
-    def tail(self) -> Optional[Node]:
-        return self.dummy_tail.prev
+        self.dhead = Node("dummy")
+        self.dtail = Node("dummy")
+        self.dhead.next = self.dtail
+        self.dtail.prev = self.dhead
+        # Initially, we only have dummy nodes
+        # DummyHead-> <-DummyTail
 
     def add(self, value: int):
         node = Node(value)
-        node.next = self.head  # N -> prev head
-        self.head.prev = node  # N <- prev head
-        node.prev = self.dummy_head  # DH <- N
-        self.dummy_head.next = node  # DH -> N
+        old_head = self.dhead.next
+
+        # There are 4 relations to update:
+        # Dummy-> <-New Node-> <-Old head
+        old_head.prev = node
+        node.next = old_head
+        self.dhead.next = node
+        node.prev = self.dhead
+
+    def remove(self, node: Node):
+        # There are 2 relations to update:
+        # Prev-> <-Node to remove-> <-Next
+        #     ^^                    ^^
+        node.prev.next = node.next
+        node.next.prev = node.prev
 
     def move_to_front(self, node: Node):
         self.remove(node)
         self.add(node.value)
 
-    def remove(self, node: Node):
-        node.prev.next = node.next
-        node.next.prev = node.prev
-
     def pop(self):
-        if self.tail.value == "dummy":
-            raise Exception("No nodes to remove")
-
-        self.remove(self.tail)
+        tail = self.dtail.prev
+        if tail.value == "dummy":
+            raise Exception("No nodes to pop")
+        self.remove(tail)
 
     def __repr__(self):
-        node = self.dummy_head
+        node = self.dhead
         s = ""
         while node:
             s += f"{node.value}"
@@ -59,8 +60,8 @@ class DoublyLinkedList:
 ll = DoublyLinkedList()
 
 ll.add(1)
-ll.pop()
-ll.pop()
-
+ll.add(2)
+# ll.move_to_front(ll.dhead.next.next)
+# ll.pop()
 
 print(ll)
